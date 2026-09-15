@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* Base styles */
         body {
@@ -872,77 +873,37 @@ body {
 
 
 /*music*/
-/* Top Right Floating Music Button */
 .music-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 99999; /* Always keep on top */
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    position: fixed; /* හැමවෙලේම එකම තැන තියෙන්න */
+    top: 20px;
+    right: 20px;
+    z-index: 9999; /* අනිත් හැමදේටම වඩා උඩින් පේන්න */
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    color: #333; /* Icon එකේ පාට */
 }
 
-.music-btn svg {
-  width: 22px;
-  height: 22px;
-  transition: transform 0.3s ease;
-}
-
-.music-btn:hover {
-  transform: scale(1.1);
-  background-color: #c9a354;
-  color: #ffffff;
-  border-color: #c9a354;
-}
-
-/* Song එක Play වෙනකොට Spin වෙන animation එක */
-.music-btn.playing {
-  background-color: #c9a354;
-  border-color: #c9a354;
-  animation: pulse-gold 2s infinite ease-in-out;
-}
-
-.music-btn.playing svg {
-  animation: spin 3s linear infinite;
-}
-
-/* Animations */
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulse-gold {
-  0% { box-shadow: 0 0 0 0 rgba(201, 163, 84, 0.7); }
-  70% { box-shadow: 0 0 0 12px rgba(201, 163, 84, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(201, 163, 84, 0); }
-}
-
-/* Mobile Responsive Setup */
+/* ෆෝන් එකට ගැලපෙන විදිහට Responsive කිරීම */
 @media (max-width: 768px) {
-  .music-btn {
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-  }
-  
-  .music-btn svg {
-    width: 18px;
-    height: 18px;
-  }
+    .music-btn {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .music-btn svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 
@@ -1022,6 +983,20 @@ body {
     50% { opacity: 1; }
 }
 
+
+/* මුලින්ම අකුරු හැංගිලා පල්ලෙහාට වෙලා තියෙන විදිහ */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px); /* පල්ලෙහා ඉඳන් එන දුර */
+    transition: all 0.8s ease-out; /* Animation එකේ වේගය (තත්පර 0.8) */
+}
+
+/* ස්ක්‍රීන් එකට ආවට පස්සේ අකුරු පේන විදිහ */
+.scroll-reveal.show-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
     </style>
 </head>
 <body>
@@ -1053,18 +1028,18 @@ body {
 
 
   <!-- Background Audio Track -->
+<!-- Audio File එක (loop එක දාලා තියෙන නිසා ඉවර වුණාම ආයෙත් ප්ලේ වෙනවා) -->
 <audio id="bg-music" loop>
-  <!-- ඔයාගේ සින්දුවේ Link එක හෝ File Name එක මෙතනට දාන්න -->
-  <source src="bgsong.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
+    <source src="bgsong.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Top Right Floating Music Button -->
-<button id="music-toggle" class="music-btn" aria-label="Toggle Music">
-  <svg id="music-icon" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-  </svg>
-</button>
+<!-- Music Icon එක -->
+<div id="music-btn" class="music-btn">
+    <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+</div>
 
     <div class="invitation-card">
         
@@ -1081,42 +1056,42 @@ body {
 
         <!-- ඉන්විටේෂන් එකේ විස්තර -->
         <div class="content">
-            <p class="intro">Together With Their Families</p>
+            <p class="intro"data-aos="fade-up"data-aos-delay="2000">Together With Their Families</p>
             
-            <div class="divider-icon">◈</div>
+            <div class="divider-icon" data-aos="fade-up" data-aos-delay="2100">◈</div>
 
-            <h1 class="names">Maduka <span class="ampersand">&</span> Nipuni</h1>
+            <h1 class="names" data-aos="fade-up" data-aos-delay="2400">Maduka <span class="ampersand">&</span> Nipuni</h1>
             
-            <div class="divider-icon">◈</div>
+            <div class="divider-icon" data-aos="fade-up" data-aos-delay="2500">◈</div>
 
-            <p class="request">Request the honour of your presence<br>at the celebration of their marriage</p>
+            <p class="request"data-aos="fade-up" data-aos-delay="2800">Request the honour of your presence<br>at the celebration of their marriage</p>
 
-            <p class="day">Wednesday</p>
-            <h2 class="date">30th December 2026</h2>
+            <p class="day"data-aos="fade-up" data-aos-delay="3000">Wednesday</p>
+            <h2 class="date" data-aos="fade-up" data-aos-delay="3000">30th December 2026</h2>
             
-            <p class="details">AT 9:00 AM<br>HOTEL ROYAL RICH</p>
+            <p class="details" data-aos="fade-up" data-aos-delay="3000">AT 9:00 AM<br>HOTEL ROYAL RICH</p>
 
             <!-- 
                 කැන්ඩියන් වෙඩින් කපල් එකේ ඉමේජ් එක.
                 මෙතන src="" ඇතුලේ ඔයාගේ කපල් එකේ PNG ෆොටෝ එකේ නම දෙන්න 
             -->
-            <div class="couple-image-container">
-                <img src="joduva.png" alt="Kandyan Wedding Couple" class="couple-img">
+            <div class="couple-image-container" data-aos="fade-up" data-aos-delay="3600">
+                <img src="joduva.png" alt="Kandyan Wedding Couple" class="couple-img" data-aos="fade-up" data-aos-delay="3600">
             </div>
 
             <div class="invitation-container">
         
-        <p class="eyebrow-text">OUR STORY</p>
+        <p class="eyebrow-text scroll-reveal" >OUR STORY</p>
         
-        <h1 class="main-heading">Two Hearts, One<br>Journey</h1>
+        <h1 class="main-heading scroll-reveal">Two Hearts, One<br>Journey</h1>
         
-        <p class="story-text" style="text-align: center;" >
+        <p class="story-text scroll-reveal" style="text-align: center;" >
             From a chance meeting to a beautiful friendship, and now to a lifetime together. We are blessed to begin this new chapter of our lives and can't wait to celebrate with you.
         </p>
 
         <div class="image-container">
             <!-- ඔබගේ පින්තූරයේ නම පහත src="" ඇතුලත ලබා දෙන්න -->
-            <img src="poruva.png" alt="Our Story Image" class="wedding-image">
+            <img src="poruva.png" alt="Our Story Image" class="wedding-image scroll-reveal">
         </div>
 
         <!-- Countdown Section Start -->
@@ -1149,7 +1124,7 @@ body {
 <!-- Countdown Section End -->
 
       <!-- Event Section Start -->
-<div class="events-section">
+<div class="events-section scroll-reveal">
     <h2 class="events-section-title">Program Details</h2>
 
     <!-- Poruwa Event -->
@@ -1186,11 +1161,11 @@ body {
 
  <section class="venue-section">
   <div class="venue-header">
-    <span class="sub-heading">THE SETTING</span>
-    <h2 class="main-heading" style="color: #221504da;">Wedding Venue</h2>
+    <span class="sub-heading scroll-reveal">THE SETTING</span>
+    <h2 class="main-heading scroll-reveal" style="color: #221504da; ">Wedding Venue</h2>
   </div>
   
-  <div class="venue-details">
+  <div class="venue-details scroll-reveal">
     <div class="icon-wrapper">
       <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -1198,12 +1173,12 @@ body {
       </svg>
     </div>
     
-    <span class="sub-heading">VENUE</span>
-    <h3 class="venue-name" style="color: #03031fc0;">Royal RICH Banquet Dompe</h3>
-    <p class="venue-location">Kaduwela , Sri lanka</p>
+    <span class="sub-heading scroll-reveal">VENUE</span>
+    <h3 class="venue-name scroll-reveal" style="color: #03031fc0;">Royal Rich Banquet Dompe</h3>
+    <p class="venue-location scroll-reveal">Kaduwela , Sri lanka</p>
   </div>
 
-  <div class="map-container">
+  <div class="map-container scroll-reveal">
     <iframe 
       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9963.027239161185!2d80.07084697767182!3d6.955172493045178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2551628c93339%3A0x4a3713b3a42dc2d0!2sRoyal%20Rich%20Banquets%20%7C%20Dompe!5e1!3m2!1sen!2slk!4v1789404194879!5m2!1sen!2slk" 
       width="100%" 
@@ -1221,7 +1196,7 @@ body {
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <!-- RSVP Section Start -->
-<div class="rsvp-section" id="rsvp-section">
+<div class="rsvp-section scroll-reveal" id="rsvp-section">
     <p class="rsvp-subtitle">KINDLY RSVP BEFORE 30TH NOVEMBER</p>
     <h2 class="rsvp-title">We Can't Wait To<br>Celebrate With You!</h2>
     
@@ -1266,7 +1241,7 @@ body {
 <!-- Wedding Footer HTML & CSS -->
 <footer class="wedding-footer">
   <div class="footer-container">
-    <p class="subtitle">WITH LOVE,</p>
+    <p class="subtitle" >WITH LOVE,</p>
     <h2 class="couple-names">Maduka & Nipuni</h2>
     <p class="event-details">December 30, 2026 · Hotel Royal Rich</p>
 
@@ -1309,7 +1284,7 @@ body {
         
     </div>
 
-
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
     // 1. Wedding Date එක මෙතනට සෙට් කරන්න (Year, Month - 1, Day, Hour, Minute)
     // සටහන: Javascript වල ජනවාරි = 0, අගෝස්තු = 7 වේ (19 August 2026 සඳහා: 2026, 7, 19, 9, 0)
@@ -1512,25 +1487,40 @@ body {
 
 
 //music
-document.addEventListener('DOMContentLoaded', () => {
-  const bgMusic = document.getElementById('bg-music');
-  const musicToggle = document.getElementById('music-toggle');
+document.addEventListener("DOMContentLoaded", function() {
+    let music = document.getElementById("bg-music");
+    let musicBtn = document.getElementById("music-btn");
+    let isPlaying = false;
 
-  let isPlaying = false;
-
-  musicToggle.addEventListener('click', () => {
-    if (isPlaying) {
-      bgMusic.pause();
-      musicToggle.classList.remove('playing');
-    } else {
-      bgMusic.play().then(() => {
-        musicToggle.classList.add('playing');
-      }).catch(error => {
-        console.log("Autoplay blocked by browser:", error);
-      });
+    // සින්දුව Play / Pause කරන Function එක
+    function toggleMusic() {
+        if (isPlaying) {
+            music.pause();
+            isPlaying = false;
+            musicBtn.style.opacity = "0.5"; // Pause කරාම Icon එක පොඩ්ඩක් ඩිම් වෙනවා
+        } else {
+            music.play();
+            isPlaying = true;
+            musicBtn.style.opacity = "1";
+        }
     }
-    isPlaying = !isPlaying;
-  });
+
+    // Icon එක click කරාමත් Play/Pause වෙන්න
+    musicBtn.addEventListener("click", toggleMusic);
+
+    // 1. මුලින්ම Web එක open උන ගමන් Play වෙන්න බලනවා
+    music.play().then(() => {
+        isPlaying = true;
+    }).catch(() => {
+        // 2. Browser එකෙන් Block කරොත්, Page එකේ කොහේ හරි click කරපු ගමන් Play වෙනවා
+        document.body.addEventListener('click', function playOnFirstClick() {
+            if (!isPlaying) {
+                toggleMusic();
+                // එක පාරක් click කරාම ආයේ මේක වැඩ නොකරන්න අයින් කරනවා
+                document.body.removeEventListener('click', playOnFirstClick);
+            }
+        }, { once: true });
+    });
 });
 
 
@@ -1551,6 +1541,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 600);
         }
     });
+
+
+
+    //anime text
+    // ඔයාගේ වීඩියෝ එක ප්ලේ වෙලා ඉවර වුණාට පස්සේ හෝ 
+  // Loading ස්ක්‍රීන් එක අයින් වුණාට පස්සේ මේක වැඩ කරන්න මේ විදිහට දාන්න
+  setTimeout(function() {
+      AOS.init({
+          duration: 1200, // ඇනිමේෂන් එක වෙන වෙලාව (මිලි තත්පර 1200)
+          once: true      // එක පාරක් විතරක් ඇනිමේෂන් එක වෙන්න
+      });
+  }, 2000); // තත්පර 2කින් පස්සේ තමයි මුළු ඇනිමේෂන් සෙට් එකම වැඩ කරන්නේ. මේ 2000 ඔයාට ඕන විදිහට වෙනස් කරගන්න.
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    
+    // ස්ක්‍රීන් එකට ආවද කියලා චෙක් කරන Observer එක හදනවා
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            
+            // Element එක ස්ක්‍රීන් එකට ආවොත් 'show-item' කියන class එක දානවා
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show-item');
+                
+                // ඔයාට ඕන නම් එක පාරක් ඇනිමේට් වෙලා ආයෙත් නොවි තියෙන්න මේ කෑල්ලේ කමෙන්ට් එක අයින් කරන්න
+                // observer.unobserve(entry.target); 
+            } else {
+                // ආයෙත් උඩට යද්දි අකුරු ටික ආයෙත් මුල් තත්වෙට පත් කරන්න
+                entry.target.classList.remove('show-item');
+            }
+            
+        });
+    }, {
+        threshold: 0.15 // අකුරු වලින් 15% ක් ස්ක්‍රීන් එකට ආවම ඇනිමේෂන් එක පටන් ගන්නවා
+    });
+
+    // 'scroll-reveal' තියෙන ඔක්කොම හොයාගෙන Observer එකට දෙනවා
+    const hiddenElements = document.querySelectorAll('.scroll-reveal');
+    hiddenElements.forEach((el) => observer.observe(el));
+    
+});
 </script>
 
 </body>
