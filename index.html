@@ -39,9 +39,9 @@
             
             /* ඔයාගේ Background Image එක මෙතනට දාන්න */
             background-image:url('bg.png'); 
-            background-size: cover;
+            background-size: contain;
             background-position: center;
-            background-repeat: no-repeat;
+            
             
             overflow: hidden; /* කොළ එලියට යන එක නතර කරන්න */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* පොඩි shadow එකක් කාඩ් එක වටේට (බෝඩර් එක අයින් කරා) */
@@ -1027,6 +1027,50 @@ body {
 }
 
 
+
+/*kola vatena animetion */
+#falling-leaves-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.dark-leaf {
+  position: absolute;
+  top: -20px;
+  /* Very subtle dark green aesthetic gradient */
+  background: linear-gradient(135deg, rgba(12, 30, 18, 0.8), rgba(4, 12, 8, 0.9));
+  border-radius: 1px 8px 1px 8px; /* Tiny leaf shape */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+  animation: fallAnimation linear infinite;
+  opacity: 0.4;
+}
+
+/* Subtle falling animation */
+@keyframes fallAnimation {
+  0% {
+    transform: translateY(-20px) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(105vh) rotate(240deg) translateX(40px);
+    opacity: 0;
+  }
+}
+
+
+
     </style>
 </head>
 <body>
@@ -1063,6 +1107,9 @@ body {
     <source src="bgsong.mp3" type="audio/mpeg">
 </audio>
 
+<!--kola anime-->
+    <div id="falling-leaves-container"></div>
+
 <!-- Music Icon එක -->
 <div id="music-btn" class="music-btn">
     <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1075,16 +1122,7 @@ body {
 
         <div class="gold-border"></div>
         
-        <!-- ඇනිමේෂන් වෙන කොළ ටික -->
-        <div class="leaves-container">
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-        </div>
+       
 
         <!-- ඉන්විටේෂන් එකේ විස්තර -->
         <div class="content">
@@ -1620,6 +1658,36 @@ document.addEventListener("DOMContentLoaded", function() {
     hiddenElements.forEach((el) => observer.observe(el));
     
 });
+
+
+//kola vetena animetion 
+const leafContainer = document.getElementById('falling-leaves-container');
+// Screen එක පිරෙන්නේ නැතිවෙන්න කොළ ගණන 10 දක්වා අඩු කළා
+const numberOfLeaves = 10; 
+
+for (let i = 0; i < numberOfLeaves; i++) {
+  const leaf = document.createElement('div');
+  leaf.classList.add('dark-leaf');
+
+  // කොළ ගොඩක් පොඩි කළා (Width: 6px - 12px)
+  const width = Math.random() * 6 + 6;
+  const height = width * 1.8;
+  leaf.style.width = `${width}px`;
+  leaf.style.height = `${height}px`;
+
+  // Random position across screen
+  leaf.style.left = `${Math.random() * 100}%`;
+
+  // Slow falling speed (8s - 14s) - හිමින් වැටෙන්න හදලා තියෙන්නේ
+  leaf.style.animationDuration = `${Math.random() * 6 + 8}s`;
+  leaf.style.animationDelay = `${Math.random() * 8}s`;
+
+  // Blur effect (1px - 2.5px blur)
+  const blurAmount = Math.random() * 1.5 + 1;
+  leaf.style.filter = `blur(${blurAmount}px)`;
+
+  leafContainer.appendChild(leaf);
+}
 </script>
 
 </body>
