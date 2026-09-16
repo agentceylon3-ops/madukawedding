@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- EmailJS Library Include (Head එකට හෝ මෙතනට එකතු කරන්න) -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* Base styles */
@@ -36,7 +38,7 @@
             background-color: #fffdf9; /* ඉමේජ් එක ලෝඩ් වෙනකම් පේන්න සුදු පාටක් */
             
             /* ඔයාගේ Background Image එක මෙතනට දාන්න */
-            background-image: url('bg.png'); 
+            background-image:url('bg.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -997,6 +999,34 @@ body {
     transform: translateY(0);
 }
 
+
+/*golden boder*/
+.gold-border {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    
+    /* Shiny Gold Gradient */
+    border: 3px solid transparent;
+    border-image: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) 1;
+    
+    pointer-events: none;
+    z-index: 9999;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .gold-border {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+    }
+}
+
+
     </style>
 </head>
 <body>
@@ -1042,6 +1072,8 @@ body {
 </div>
 
     <div class="invitation-card">
+
+        <div class="gold-border"></div>
         
         <!-- ඇනිමේෂන් වෙන කොළ ටික -->
         <div class="leaves-container">
@@ -1066,10 +1098,10 @@ body {
 
             <p class="request"data-aos="fade-up" data-aos-delay="2800">Request the honour of your presence<br>at the celebration of their marriage</p>
 
-            <p class="day"data-aos="fade-up" data-aos-delay="3000">Wednesday</p>
-            <h2 class="date" data-aos="fade-up" data-aos-delay="3000">30th December 2026</h2>
+            <p class="day"data-aos="fade-up" data-aos-delay="2900">Wednesday</p>
+            <h2 class="date" data-aos="fade-up" data-aos-delay="2900">30th December 2026</h2>
             
-            <p class="details" data-aos="fade-up" data-aos-delay="3000">AT 9:00 AM<br>HOTEL ROYAL RICH</p>
+            <p class="details" data-aos="fade-up" data-aos-delay="3600">AT 9:30 AM<br>HOTEL ROYAL RICH</p>
 
             <!-- 
                 කැන්ඩියන් වෙඩින් කපල් එකේ ඉමේජ් එක.
@@ -1154,7 +1186,7 @@ body {
         </div>
         <h3 class="event-item-title">Couple Leaves</h3>
         <p class="event-item-info"><i class="fa-regular fa-calendar"></i>30th December 2026</p>
-        <p class="event-item-info"><i class="fa-regular fa-clock"></i> 4:30 PM</p>
+        <p class="event-item-info"><i class="fa-regular fa-clock"></i> 4:00 PM</p>
     </div>
 </div>
 <!-- Event Section End -->
@@ -1192,8 +1224,7 @@ body {
 </section>
 
 
-<!-- EmailJS Library Include (Head එකට හෝ මෙතනට එකතු කරන්න) -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 
 <!-- RSVP Section Start -->
 <div class="rsvp-section scroll-reveal" id="rsvp-section">
@@ -1206,7 +1237,7 @@ body {
         <!-- Guest Name Field -->
         <div class="rsvp-form-group">
             <label class="rsvp-label">YOUR NAME</label>
-            <input type="text" id="rsvp-name" class="rsvp-input" placeholder="Your Name" readonly>
+            <input type="text" id="rsvp-name" class="rsvp-input" placeholder="Your Name">
         </div>
 
         <!-- Attendance Status Field -->
@@ -1334,50 +1365,53 @@ body {
 
 
 
-    // -------------------------------------------------------------
-    // 1. EmailJS Setup (මෙතැනට ඔයාගේ EmailJS Public Key එක දාන්න)
-    // -------------------------------------------------------------
-    emailjs.init("YOUR_PUBLIC_KEY"); 
+   // -------------------------------------------------------------
+// 1. EmailJS Setup (මෙතැනට ඔයාගේ EmailJS Public Key එක දාන්න)
+// -------------------------------------------------------------
 
-    let attendanceStatus = "JOYFULLY ACCEPT"; // Default status
-    let currentGuestCount = 1;
-    let maxAllowedGuests = 5; // Default limit
+let attendanceStatus = "JOYFULLY ACCEPT"; // Default status
+let currentGuestCount = 1;
+let maxAllowedGuests = 5; // Default limit
 
-    // ඕනෑම ආකාරයක URL එකකින් Param Read කරන ශක්තිමත් Function එකක්
-    function getQueryParam(param) {
-        const url = window.location.href;
-        const regex = new RegExp('[?&]' + param + '=([^&#]*)', 'i');
-        const match = url.match(regex);
-        return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+// ඕනෑම ආකාරයක URL එකකින් Param Read කරන ශක්තිමත් Function එකක්
+function getQueryParam(param) {
+    const url = window.location.href;
+    const regex = new RegExp('[?&]' + param + '=([^&#]*)', 'i');
+    const match = url.match(regex);
+    return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // FIX 1: EmailJS Initialize කිරීම මෙතැනට ගෙන ඒම ආරක්ෂිතයි
+    emailjs.init("cW27DW2LdmngeCX4z"); 
+
+    // URL Parameters ලබා ගැනීම
+    const nameParam = getQueryParam('name');
+    const typeParam = getQueryParam('type');
+
+    // Name Field සෙට් කිරීම
+    const nameInput = document.getElementById('rsvp-name');
+    if (nameParam && nameParam.trim() !== "") {
+        nameInput.value = nameParam;
+        // FIX 2: Link එකෙන් Name එක ආවම වෙනස් කරන්න බැරි කිරීම
+        nameInput.setAttribute('readonly', 'true'); 
+    } else {
+        nameInput.value = "";
+        nameInput.removeAttribute('readonly'); // Link එකේ Name නැත්නම් Type කරන්න ඉඩ දීම
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        // URL Parameters ලබා ගැනීම
-        const nameParam = getQueryParam('name');
-        const typeParam = getQueryParam('type');
+    // Type (Guest Count) Field සෙට් කිරීම
+    if (typeParam && !isNaN(typeParam) && parseInt(typeParam) > 0) {
+        const parsedType = parseInt(typeParam, 10);
+        maxAllowedGuests = parsedType;     // Max limit එක set කිරීම
+        currentGuestCount = parsedType;    // Box එකේ එකපාරම පෙන්නන ගාන set කිරීම
+    } else {
+        currentGuestCount = 1;
+        maxAllowedGuests = 5;
+    }
 
-        // Name Field සෙට් කිරීම
-        const nameInput = document.getElementById('rsvp-name');
-        if (nameParam && nameParam.trim() !== "") {
-            nameInput.value = nameParam;
-        } else {
-            nameInput.value = "";
-            nameInput.removeAttribute('readonly'); // Link එකේ Name නැත්නම් Type කරන්න ඉඩ දීම
-        }
-
-        // Type (Guest Count) Field සෙට් කිරීම
-        if (typeParam && !isNaN(typeParam) && parseInt(typeParam) > 0) {
-            const parsedType = parseInt(typeParam, 10);
-            maxAllowedGuests = parsedType;     // Max limit එක set කිරීම
-            currentGuestCount = parsedType;    // Box එකේ එකපාරම පෙන්නන ගාන set කිරීම
-        } else {
-            currentGuestCount = 1;
-            maxAllowedGuests = 5;
-        }
-
-        // Display එක Update කිරීම
-        updateGuestDisplay();
-    });
+    // Display එක Update කිරීම
+    updateGuestDisplay();
 
     // Accept / Decline Toggle Logic
     const btnAccept = document.getElementById('btn-accept');
@@ -1416,10 +1450,6 @@ body {
         }
     });
 
-    function updateGuestDisplay() {
-        document.getElementById('guest-count-display').innerText = currentGuestCount;
-    }
-
     // EmailJS Form Submission
     document.getElementById('rsvp-form').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -1447,7 +1477,7 @@ body {
         // -------------------------------------------------------------
         // 2. EmailJS Service ID සහ Template ID මෙතැනට දාන්න
         // -------------------------------------------------------------
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        emailjs.send('service_b3kr9xv', 'template_5n1yvdm', templateParams)
             .then(function (response) {
                 submitBtn.innerText = "RSVP NOW ♥";
                 submitBtn.disabled = false;
@@ -1461,7 +1491,14 @@ body {
                 console.error("EmailJS Error:", error);
             });
     });
+});
 
+function updateGuestDisplay() {
+    const display = document.getElementById('guest-count-display');
+    if (display) {
+        display.innerText = currentGuestCount;
+    }
+}
 
 
 
